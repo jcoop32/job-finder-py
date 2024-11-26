@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Resume Analysis</title>
+  </head>
+  <body>
+    <h1>Resume Summary and Key Words</h1>
+    {% for r in res %}
+    <p>Name: {{ r.name }}</p>
+    <p>Job Title: {{ r.job_title }}</p>
+    <span> Email: <a href="mailto:{{ r.email }}">{{ r.email }}</a> </span>
+    <p>LinkedIn Profile: {{ r.linkedin_profile }}</p>
+    <p>Skills:</p>
+    <ul>
+      {% for s in r.skills %}
+      <li>{{ s }}</li>
+      {% endfor %}
+    </ul>
+    <p>Possible Jobs:</p>
+    <ul>
+      {% for p in r.possible_jobs %}
+      <li>{{ p }}</li>
+      {% endfor %}
+    </ul>
+    <p>Summary: {{ r.summary }}</p>
+    <hr />
+    {% endfor %}
+  </body>
+</html>
