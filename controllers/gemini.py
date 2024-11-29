@@ -25,8 +25,8 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
 )
-resume_pdf = genai.upload_file("jc-resume-2024-fe.pdf")
-resume_pdf_2 = genai.upload_file("jjmc-resume-2024-fs.pdf")
+# resume_pdf = genai.upload_file("jc-resume-2024-fe.pdf")
+# resume_pdf_2 = genai.upload_file("jjmc-resume-2024-fs.pdf")
 kayla_resume_pdf = genai.upload_file("kayla_resume.pdf")
 kaycee_resume_pdf = genai.upload_file("kc_resume.pdf")
 
@@ -35,11 +35,7 @@ resume_analysis_prompt = "Pull the name, email, linkedin profile/link (if is giv
 
 def get_summary_of_resume():
     response = model.generate_content(
-        [
-            resume_analysis_prompt,
-            resume_pdf,
-            kaycee_resume_pdf,
-        ],
+        [resume_analysis_prompt, kayla_resume_pdf, kaycee_resume_pdf],
         generation_config=genai.GenerationConfig(
             response_mime_type="application/json", response_schema=list[ResumeSummary]
         ),
