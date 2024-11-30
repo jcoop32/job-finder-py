@@ -1,11 +1,11 @@
 import requests
 import os
 from dotenv import load_dotenv
-from get_location import get_linkedin_location
+from controllers.get_location import get_linkedin_location
 
 load_dotenv()
 
-job_api_key = os.getenv("job_api_1")
+job_api_key = os.getenv("job_api_2")
 
 
 def search_for_jobs(key_words, location):
@@ -16,7 +16,6 @@ def search_for_jobs(key_words, location):
         "keywords": key_words,
         "locationId": location_id,
         "datePosted": "pastWeek",
-        "onsiteRemote": "onSite",
         "jobType": "fullTime",
         "sort": "mostRelevant",
     }

@@ -9,36 +9,9 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/static/style.css" />
-    <title>Resume Analysis</title>
+    <title>Job Search Results</title>
   </head>
   <body class="p-3">
-    <h1>Resume Summary and Key Words</h1>
-    {% for r in res %}
-    <p>Name: {{ r.name }}</p>
-    <p>Job Title: {{ r.job_title }}</p>
-    <span> Email: <a href="mailto:{{ r.email }}">{{ r.email }}</a> </span>
-    <p>LinkedIn Profile: {{ r.linkedin_profile }}</p>
-    <p>Location: {{ r.location }}</p>
-    <p>Skills:</p>
-    <ul>
-      {% for s in r.skills %}
-      <li>{{ s }}</li>
-      {% endfor %}
-    </ul>
-    <p>Possible Jobs:</p>
-    <ul>
-      {% for p in r.possible_jobs %}
-      <li>{{ p }}</li>
-      {% endfor %}
-    </ul>
-    <p>Summary: {{ r.summary }}</p>
-    <hr />
-    {% endfor %}
-    <!-- <h3>Search for jobs based on resume</h3>
-    <a href="/job-results"
-      ><button type="button" class="btn btn-primary">Search</button></a
-    > -->
     <h1>Job Results based on your resume</h1>
 
     <div class="container text-center">

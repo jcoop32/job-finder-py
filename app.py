@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from controllers.gemini import get_summary_of_resume, get_person
+from controllers.gemini import get_summary_of_resume
+from controllers.job_search import search_for_jobs
 
 
 app = Flask(__name__)
@@ -12,12 +13,17 @@ def index():
 
 @app.route("/ai", methods=["POST", "GET"])
 def ai():
-    # if request.method == "POST":
-    #     summary_of_resume = get_summary_of_resume()
-    #     return redirect("/ai")
-    # else:
-    summary_of_resume = get_summary_of_resume()
-    return render_template("ai.html", res=summary_of_resume)
+    json_form, location, keywords = get_summary_of_resume()
+    jobs = search_for_jobs(keywords, location)
+    return render_template("ai.html", res=json_form, jobs=jobs)
+
+
+# @app.route("/job-results", methods=["GET"])
+# def jobs():
+#     _, location, keywords = get_summary_of_resume()
+
+#     print(jobs)
+#     return render_template("job-results.html", jobs=jobs)
 
 
 if __name__ == "__main__":
