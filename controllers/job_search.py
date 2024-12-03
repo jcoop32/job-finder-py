@@ -2,12 +2,18 @@ import requests
 import os
 from dotenv import load_dotenv
 import numpy as np
+
 from controllers.get_location import get_linkedin_location
+
+# from get_location import get_linkedin_location
+from linkedin_api import Linkedin
+
+api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 
 load_dotenv()
 
-job_api_key = os.getenv("job_api_6")
-job_api_key2 = os.getenv("job_api_7")
+job_api_key = os.getenv("job_api_7")
+job_api_key2 = os.getenv("job_api_8")
 
 
 def search_for_jobs(key_words, location):
@@ -18,12 +24,12 @@ def search_for_jobs(key_words, location):
         "keywords": key_words,
         "locationId": location_id,
         "datePosted": "past24Hours",
-        "jobType": "fullTime, internship",
+        "jobType": "fullTime",
         "sort": "mostRelevant",
     }
 
     headers = {
-        "x-rapidapi-key": job_api_key,
+        "x-rapidapi-key": job_api_key2,
         "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
     }
 
@@ -38,50 +44,58 @@ def search_for_jobs(key_words, location):
 # jobs = search_for_jobs("software engineer", "chicago")
 
 
-def get_job_details(job_id):
-    url = "https://linkedin-data-api.p.rapidapi.com/get-job-details"
+# def get_job_details(job_id):
+#     url = "https://linkedin-data-api.p.rapidapi.com/get-job-details"
 
-    querystring = {"id": job_id}
+#     querystring = {"id": job_id}
 
-    headers = {
-        "x-rapidapi-key": job_api_key2,
-        "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
-    }
+#     headers = {
+#         "x-rapidapi-key": job_api_key,
+#         "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
+#     }
 
-    response = requests.get(url, headers=headers, params=querystring)
-    json_form = response.json()
-    jobs_with_details = []
-    details = json_form["data"]
-    # return details
-    print(details)
-
-
-# get_job_details("4086033586")
+#     response = requests.get(url, headers=headers, params=querystring)
+#     json_form = response.json()
+#     details = json_form
+#     # return details
+#     print(details)
 
 
-def filtered_jobs(jobs, resume_skills):
+# get_job_details("4073579367")
+
+
+def job_details(job_id):
+    job = api.get_job_skills(job_id)
+    job_skills = []
+    # append first 10 skills to arr
+    for skill in job["skillMatchStatuses"][:10]:
+        job_skills.append(skill["skill"]["name"])
+
+    return job_skills
+    # print(job_skills)
+
+
+# job_details("4089332020")
+
+
+def filtered_jobs(keywords, location, resume_skills):
+    jobs = search_for_jobs(keywords, location)
     matched_jobs = []
+    set1 = set(s.lower() for s in resume_skills)
+    # print(len(jobs))
+    # if len(jobs) > 3:
+    #     jobs = jobs[:5]
     for job in jobs:
-        skills_from_job = get_job_details(job["id"])
-        if skills_from_job["skills"]:
-            similar_skills = np.intersect1d(
-                str(resume_skills).lower(), str(skills_from_job["skills"]).lower()
-            )
-            if len(similar_skills) >= 3:
-                matched_jobs.append(job)
+        job_detail = job_details(job["id"])
+        set2 = set(s.lower() for s in job_detail)
+        similar_skills = set1.intersection(set2)
 
-    print(matched_jobs)
+        # print(similar_skills)
+        if len(similar_skills) >= 1:
+            matched_jobs.append(job)
 
+    # print(f"{len(matched_jobs)} job(s) found: \n {matched_jobs}")
+    return matched_jobs
 
-res_skills = [
-    "Node.js",
-    "TypeScript",
-    "NestJS",
-    "Next.js",
-    "Java",
-    "Python",
-    "HTML",
-    "CSS",
-]
 
 # filtered_jobs(jobs, res_skills)

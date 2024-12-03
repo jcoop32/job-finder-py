@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-job_api_key = os.getenv("location_api")
+job_api_key = os.getenv("location_api_3")
 
 
 def get_linkedin_location(location):

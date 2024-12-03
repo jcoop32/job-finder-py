@@ -3,13 +3,12 @@ from dotenv import load_dotenv
 import os
 import typing_extensions as typing
 import json
-from linkedin_api import Linkedin
 
 
 load_dotenv()
-linkedin_api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 
 
+# data structure gemini returns
 class ResumeSummary(typing.TypedDict):
     name: str
     email: str
@@ -26,10 +25,6 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
 )
-# resume_pdf = genai.upload_file("jc-resume-2024-fe.pdf")
-
-# kayla_resume_pdf = genai.upload_file("kayla_resume.pdf")
-# kaycee_resume_pdf = genai.upload_file("kc_resume.pdf")
 
 resume_analysis_prompt = "Pull the name, email, linkedin profile/link (if is given), location (city only), job title, skills, some possible job titles that fit this resume, and a summary from each of the resumes. If only one resume is given do not change the output of the response if prompted with the same resume.: "
 
@@ -42,12 +37,14 @@ def get_summary_of_resume(filename):
             response_mime_type="application/json", response_schema=list[ResumeSummary]
         ),
     )
+    # convert data to json
     json_form = json.loads(response.text)
     location = json_form[0]["location"]
     skills = json_form[0]["skills"]
     job_title = json_form[0]["job_title"]
     list(skills).append(job_title)
     # job_titles = json_form[0]["possible_jobs"]
+    # unformatted keywords
     un_keywords = skills
     keywords = " ".join(un_keywords)
-    return json_form, location, keywords
+    return json_form, location, keywords, skills

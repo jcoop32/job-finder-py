@@ -39,13 +39,11 @@
     {% endfor %}
     <h3>Upload another resume?</h3>
     <a href="/"
-      ><button type="button" class="btn btn-primary">
-        Upload Another Here
-      </button></a
+      ><button type="button" class="btn btn-primary">Upload Another</button></a
     >
     <hr />
     <h1>Job Results based on your resume</h1>
-
+    <h6>{{ count }} total job(s)</h6>
     <div class="container text-center">
       {% for j in jobs %}
       <div class="row" id="{{ j.id }}">
