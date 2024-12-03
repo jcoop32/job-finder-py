@@ -4,27 +4,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-job_api_key = os.getenv("job_api_3")
+job_api_key = os.getenv("location_api")
 
 
 def get_linkedin_location(location):
-    url = "https://linkedin-data-api.p.rapidapi.com/search-locations"
 
-    querystring = {"keyword": location}
+    url = "https://linkedin-data-scraper.p.rapidapi.com/suggestion_location"
+
+    querystring = {"query": location}
 
     headers = {
         "x-rapidapi-key": job_api_key,
-        "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
+        "x-rapidapi-host": "linkedin-data-scraper.p.rapidapi.com",
     }
 
     response = requests.get(url, headers=headers, params=querystring)
-    response_to_json = response.json()
-    data = response_to_json["data"]["items"][0]["id"]
-
-    location_id = data[11:]
+    formatted_data = response.json()
+    location_id = formatted_data["suggestions"][0]["urn"]
 
     # print(location_id)
     return location_id
 
 
-# get_linkedin_location("berlin")
+# get_linkedin_location("Chicago, IL")

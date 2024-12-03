@@ -26,17 +26,18 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
 )
-resume_pdf = genai.upload_file("jc-resume-2024-fe.pdf")
-# resume_pdf_2 = genai.upload_file("jjmc-resume-2024-fs.pdf")
+# resume_pdf = genai.upload_file("jc-resume-2024-fe.pdf")
+
 # kayla_resume_pdf = genai.upload_file("kayla_resume.pdf")
 # kaycee_resume_pdf = genai.upload_file("kc_resume.pdf")
 
-resume_analysis_prompt = "Pull the name, email, linkedin profile/link (if is given), location, job title, skills, some possible job titles that fit this resume, and a summary from ech of the resumes: "
+resume_analysis_prompt = "Pull the name, email, linkedin profile/link (if is given), location (city only), job title, skills, some possible job titles that fit this resume, and a summary from each of the resumes. If only one resume is given do not change the output of the response if prompted with the same resume.: "
 
 
-def get_summary_of_resume():
+def get_summary_of_resume(filename):
+    resume = genai.upload_file(f"resume_uploads/{filename}")
     response = model.generate_content(
-        [resume_analysis_prompt, resume_pdf],
+        [resume_analysis_prompt, resume],
         generation_config=genai.GenerationConfig(
             response_mime_type="application/json", response_schema=list[ResumeSummary]
         ),
