@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from controllers.gemini import get_summary_of_resume
-from controllers.job_search import filtered_jobs
+from controllers.job_search import filtered_jobs, search_for_jobs
 import os
 
 
@@ -26,12 +26,12 @@ def index():
 
 @app.route("/ai", methods=["POST", "GET"])
 def ai():
-    json_form, location, keywords, skills = get_summary_of_resume(filename)
-    jobs = filtered_jobs(keywords, location, skills)
-    total_jobs = len(jobs)
-    print(total_jobs)
+    json_form, location, skills, res_skills = get_summary_of_resume(filename)
+    # jobs = filtered_jobs(skills, location, res_skills)
+    jobs = search_for_jobs(tuple(skills), location)
+
     return render_template(
-        "ai.html", res=json_form, jobs=jobs, filename=filename, count=total_jobs
+        "ai.html", res=json_form, jobs=jobs, filename=filename, count=len(jobs)
     )
 
 
