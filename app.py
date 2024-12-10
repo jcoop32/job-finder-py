@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-from controllers.gemini import get_summary_of_resume
+from controllers.gemini import get_summary_of_resume, matched_jobs
 from controllers.job_search import filtered_jobs, search_for_jobs
+from controllers.get_location import get_linkedin_location
 import os
 
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "resume_uploads"
 
 filename = ""
+outer_jobs = []
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -27,12 +29,22 @@ def index():
 @app.route("/ai", methods=["POST", "GET"])
 def ai():
     json_form, location, skills, res_skills = get_summary_of_resume(filename)
+    location_id = get_linkedin_location(location)
     # jobs = filtered_jobs(skills, location, res_skills)
-    jobs = search_for_jobs(tuple(skills), location)
-
+    jobs = search_for_jobs(skills, location_id)
+    global outer_jobs
+    outer_jobs = jobs
+    # test_prompt = matched_jobs(filename, jobs)
+    # print(test_prompt)
     return render_template(
         "ai.html", res=json_form, jobs=jobs, filename=filename, count=len(jobs)
     )
+
+
+@app.route("/gemini")
+def gemini():
+    filtered_jobs = matched_jobs(filename, outer_jobs)
+    return render_template("gemini.html", jobs=filtered_jobs, count=len(filtered_jobs))
 
 
 # @app.route("/job-results", methods=["GET"])

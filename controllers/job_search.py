@@ -1,7 +1,6 @@
 import requests
 import os
 from dotenv import load_dotenv
-import concurrent.futures
 import time
 import functools
 
@@ -15,7 +14,12 @@ api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 load_dotenv()
 
 job_api_key = os.getenv("job_api_8")
-job_api_key2 = os.getenv("job_api_9")
+job_api_key2 = os.getenv("job_api_2")
+
+url1 = "https://linkedin-data-api.p.rapidapi.com/search-jobs-v2"
+url2 = "https://linkedin-api8.p.rapidapi.com/search-jobs-v2"
+host1 = "linkedin-data-api.p.rapidapi.com"
+host2 = "linkedin-api8.p.rapidapi.com"
 
 
 def time_it(func):
@@ -31,19 +35,18 @@ def time_it(func):
     return wrapper
 
 
-# key_words_list = [
-#     "Full stack developer",
-#     "frontend developer",
-#     "software engineer",
-# ]
+key_words_list = [
+    "Full stack developer",
+    "frontend developer",
+    "software engineer",
+]
 
-# location = "San Francisco"
+location = "103112676"  # chicago
 
 
-@functools.lru_cache(maxsize=128)
-def search_for_jobs(key_words, location):
-    location_id = get_linkedin_location(location)
-    url = "https://linkedin-data-api.p.rapidapi.com/search-jobs-v2"
+@time_it
+def search_for_jobs(key_words, location_id):
+    url = url2
 
     querystring = {
         "keywords": key_words,
@@ -55,51 +58,16 @@ def search_for_jobs(key_words, location):
 
     headers = {
         "x-rapidapi-key": job_api_key,
-        "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
+        "x-rapidapi-host": host2,
     }
-
-    response = requests.get(url, headers=headers, params=querystring)
-    response_to_json = response.json()
-    data = response_to_json["data"]
-
-    # print(data)
-    return data
-
-
-# @functools.lru_cache(maxsize=128)
-# def search_jobs_parallel(key_words_list, location):
-#     location_id = get_linkedin_location(location)  # Assuming you have this function
-#     url = "https://linkedin-data-api.p.rapidapi.com/search-jobs-v2"
-#     headers = {
-#         "x-rapidapi-key": job_api_key,
-#         "x-rapidapi-host": "linkedin-data-api.p.rapidapi.com",
-#     }
-
-#     with concurrent.futures.ThreadPoolExecutor() as executor:
-#         futures = []
-#         for key_words in key_words_list:
-#             querystring = {
-#                 "keywords": key_words,
-#                 "locationId": location_id,
-#                 "datePosted": "pastWeek",
-#                 "jobType": "fullTime",
-#                 "sort": "mostRelevant",
-#             }
-#             futures.append(
-#                 executor.submit(requests.get, url, headers=headers, params=querystring)
-#             )
-
-#         results = []
-#         for future in concurrent.futures.as_completed(futures):
-#             response = future.result()
-#             response_to_json = response.json()
-#             data = response_to_json["data"]
-#             results.append(data)
-#     return results[0]
-
-
-# results = search_jobs_parallel(tuple(key_words_list), location)
-# print(results)
+    try:
+        response = requests.get(url, headers=headers, params=querystring)
+        response_to_json = response.json()
+        data = response_to_json["data"]
+        # print(data)
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"Error occured: {e}")
 
 
 # jobs = search_for_jobs(key_words_list, location)
@@ -113,10 +81,6 @@ def search_for_jobs(key_words, location):
 @functools.lru_cache(maxsize=128)
 def job_details(job_id):
     job = api.get_job_skills(job_id)
-    # job_skills = []
-    # # append first 10 skills to arr
-    # for skill in job["skillMatchStatuses"][:10]:
-    #     job_skills.append(skill["skill"]["name"])
     job_skills = [skill["skill"]["name"] for skill in job["skillMatchStatuses"][:10]]
 
     return job_skills
@@ -129,7 +93,7 @@ def job_details(job_id):
 @time_it
 @functools.lru_cache(maxsize=128)
 def filtered_jobs(keywords, location, resume_skills):
-    jobs = search_jobs_parallel(keywords, location)
+    jobs = search_for_jobs(keywords, location)
     matched_jobs = []
     set1 = set(s.lower() for s in resume_skills)
     # print(len(jobs))
@@ -162,3 +126,33 @@ def filtered_jobs(keywords, location, resume_skills):
 
 # cached_res = filtered_jobs(key_words_list, "Chicago", tuple(res_skills))
 # print(cached_res)
+
+
+@time_it
+def search_for_jobs_without_location(key_words):
+    url = url2
+    location = "103112676"  # chicago
+
+    querystring = {
+        "keywords": key_words,
+        "locationId": location,
+        "datePosted": "pastWeek",
+        "jobType": "fullTime",
+        "sort": "mostRelevant",
+    }
+
+    headers = {
+        "x-rapidapi-key": job_api_key,
+        "x-rapidapi-host": host2,
+    }
+    try:
+        response = requests.get(url, headers=headers, params=querystring)
+        response_to_json = response.json()
+        data = response_to_json["data"]
+        # print(data)
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"Error occured: {e}")
+
+
+# search_for_jobs_without_location(key_words_list)
