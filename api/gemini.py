@@ -1,25 +1,13 @@
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
-import typing_extensions as typing
 import json
+from gemini_prompts.resume_analysis_prompt import prompt as resume_analysis_prompt
 
-from models.gemini_response_schemas import ResumeSummary, JobPosting
-
+from schemas.resume_analysis_schema import ResumeAnalysis
+from schemas.job_api_schema import JobPosting
 
 load_dotenv()
-
-
-# data structure gemini returns
-# class ResumeSummary(typing.TypedDict):
-#     name: str
-#     email: str
-#     linkedin_profile: str
-#     location: str
-#     job_title: str
-#     skills: list[str]
-#     possible_jobs: list[str]
-#     summary: str
 
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -28,7 +16,6 @@ model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
 )
 
-resume_analysis_prompt = "Pull the name, email, linkedin profile/link (if is given), location (city only), job title, skills, some possible job titles that fit this resume, and a summary from each of the resumes: "
 job_match_prompt = "With this JSON of these jobs, return me an array with all the jobs with the best match with the given resume."
 
 
@@ -37,19 +24,17 @@ def get_summary_of_resume(resume_filename):
     response = model.generate_content(
         [resume_analysis_prompt, resume],
         generation_config=genai.GenerationConfig(
-            response_mime_type="application/json", response_schema=list[ResumeSummary]
+            response_mime_type="application/json", response_schema=ResumeAnalysis
         ),
     )
     # convert data to json
     json_form = json.loads(response.text)
-    location = json_form[0]["location"]
-    skills = json_form[0]["skills"]
-    res_skills = json_form[0]["skills"]
-    job_title = json_form[0]["job_title"]
-    job_titles = json_form[0]["possible_jobs"]
-    list(skills).append(job_title)
-    list(skills).append(job_titles)
-    return json_form, location, skills, res_skills
+    # print(json_form)
+    data: ResumeAnalysis = json_form
+    location = data["location"]
+    skills = data["skills"] + data["suggested_job_titles"] + [data["current_job_title"]]
+
+    return data, location, skills
 
 
 # find good matching jobs with gemini api
@@ -67,7 +52,6 @@ def matched_jobs(resume_filename, jobs):
     )
 
     json_form = json.loads(response.text)
-    # print(json_form)
-    print(len(json_form))
-    print(type(json_form))
-    return json_form
+    data: list[JobPosting] = json_form[0]
+    print(data)
+    return data

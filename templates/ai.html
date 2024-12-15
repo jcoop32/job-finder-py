@@ -16,27 +16,26 @@
     <h1>Resume Summary and Key Words</h1>
     <h6>Based on <strong>{{ filename }}</strong> you uploaded</h6>
     <hr />
-    {% for r in res %}
-    <p>Name: {{ r.name }}</p>
-    <p>Job Title: {{ r.job_title }}</p>
-    <span> Email: <a href="mailto:{{ r.email }}">{{ r.email }}</a> </span>
-    <p>LinkedIn Profile: {{ r.linkedin_profile }}</p>
-    <p>Location: {{ r.location }}</p>
+    <p>Name: {{ res.name }}</p>
+    <p>Job Title: {{ res.current_job_title }}</p>
+    <span> Email: <a href="mailto:{{ res.email }}">{{ res.email }}</a> </span>
+    <p>LinkedIn Profile: {{ res.linkedin_profile }}</p>
+    <p>Location: {{ res.location }}</p>
     <p>Skills:</p>
     <ul>
-      {% for s in r.skills %}
+      {% for s in res.skills %}
       <li>{{ s }}</li>
       {% endfor %}
     </ul>
     <p>Possible Jobs:</p>
     <ul>
-      {% for p in r.possible_jobs %}
+      {% for p in res.suggested_job_titles %}
       <li>{{ p }}</li>
       {% endfor %}
     </ul>
-    <p>Summary: {{ r.summary }}</p>
+    <p>Summary: {{ res.summary }}</p>
     <hr />
-    {% endfor %}
+
     <h3>Upload another resume?</h3>
     <a href="/"
       ><button type="button" class="btn btn-primary">Upload Another</button></a
