@@ -1,0 +1,49 @@
+{% macro datePostedRadio() -%}
+<p class="mt-2">Date Posted:</p>
+<!-- anytime -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="datePosted"
+    id="datePosted-anytime"
+    checked
+    value="anyTime"
+  />
+  <label class="form-check-label" for="datePosted-anytime">Any time</label>
+</div>
+<!-- pastmonth -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="datePosted"
+    id="datePosted-month"
+    value="pastMonth"
+  />
+  <label class="form-check-label" for="datePosted-month"> Past Month </label>
+</div>
+<!-- past week -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="datePosted"
+    id="datePosted-week"
+    value="pastWeek"
+  />
+  <label class="form-check-label" for="datePosted-week"> Past Week </label>
+</div>
+<!-- past 24 hours -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="datePosted"
+    id="datePosted-24hrs"
+    value="past24Hours"
+  />
+  <label class="form-check-label" for="datePosted-24hrs"> Past 24 Hours </label>
+</div>
+<!-- end date posted radios -->
+{%- endmacro %}

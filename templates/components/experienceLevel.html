@@ -1,0 +1,82 @@
+{% macro experienceLevelRadio() -%}
+<p class="mt-2">Experience Level:</p>
+<!-- internship -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-internship"
+    checked
+    value="internship"
+  />
+  <label class="form-check-label" for="experienceLevel-internship"
+    >Internship</label
+  >
+</div>
+<!-- associate -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-associate"
+    value="associate"
+  />
+  <label class="form-check-label" for="experienceLevel-associate">
+    Associate
+  </label>
+</div>
+<!-- director -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-director"
+    value="director"
+  />
+  <label class="form-check-label" for="experienceLevel-director">
+    Director
+  </label>
+</div>
+<!-- entryLevel -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-entryLevel"
+    value="entryLevel"
+  />
+  <label class="form-check-label" for="experienceLevel-entryLevel">
+    Entry level
+  </label>
+</div>
+<!-- midSeniorLevel-->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-midSeniorLevel"
+    value="midSeniorLevel"
+  />
+  <label class="form-check-label" for="experienceLevel-midSeniorLevel">
+    Mid-Senior level
+  </label>
+</div>
+<!-- executive-->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="experienceLevel"
+    id="experienceLevel-executive"
+    value="executive"
+  />
+  <label class="form-check-label" for="experienceLevel-executive">
+    Executive
+  </label>
+</div>
+{%- endmacro %}

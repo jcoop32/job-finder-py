@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 import json
 from gemini_prompts.resume_analysis_prompt import prompt as resume_analysis_prompt
+from gemini_prompts.job_match_prompt import prompt as job_match_prompt
 
 from schemas.resume_analysis_schema import ResumeAnalysis
 from schemas.job_api_schema import JobPosting
@@ -15,8 +16,6 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
 )
-
-job_match_prompt = "With this JSON of these jobs, return me an array with all the jobs with the best match with the given resume."
 
 
 def get_summary_of_resume(resume_filename):
@@ -38,12 +37,13 @@ def get_summary_of_resume(resume_filename):
 
 
 # find good matching jobs with gemini api
-def matched_jobs(resume_filename, jobs):
+def matched_jobs(resume_filename, jobs: list[JobPosting]):
     print("in filtered jobs func")
     resume = genai.upload_file(f"resume_uploads/{resume_filename}")
     response = model.generate_content(
         [
-            f"For each element of jobs in this array: {jobs}, find the jobs that are matches to this resume and remove the ones that are not matches. Use the resume's job title, possible job titles, skills, and experience to make your decision. Make sure each job follows the response_schema given.",
+            job_match_prompt,
+            jobs,
             resume,
         ],
         generation_config=genai.GenerationConfig(

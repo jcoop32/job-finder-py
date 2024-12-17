@@ -1,0 +1,48 @@
+{% macro jobTypeRadio() -%}
+<p class="mt-2">Job Type:</p>
+<!-- fulltime -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="jobType"
+    id="jobType-fulltime"
+    checked
+    value="fullTime"
+  />
+  <label class="form-check-label" for="jobType-fulltime">Full-time</label>
+</div>
+<!-- partime -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="jobType"
+    id="jobType-parttime"
+    value="partTime"
+  />
+  <label class="form-check-label" for="jobType-parttime"> Part-time </label>
+</div>
+<!-- contract -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="jobType"
+    id="jobType-contract"
+    value="contract"
+  />
+  <label class="form-check-label" for="jobType-contract"> Contract </label>
+</div>
+<!-- internship -->
+<div class="form-check mx-2">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="jobType"
+    id="jobType-internship"
+    value="internship"
+  />
+  <label class="form-check-label" for="jobType-internship"> Internship </label>
+</div>
+{%- endmacro %}

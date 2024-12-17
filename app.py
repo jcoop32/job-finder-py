@@ -10,16 +10,29 @@ app.config["UPLOAD_FOLDER"] = "resume_uploads"
 
 filename = ""
 outer_jobs = []
+datePosted = ""
+jobType = ""
+experienceLevel = ""
+onSiteRemote = ""
 
 
 @app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
+        global datePosted
+        datePosted = request.form.get("datePosted")
+        global jobType
+        jobType = request.form.get("jobType")
+        global experienceLevel
+        experienceLevel = request.form.get("experienceLevel")
+        global onSiteRemote
+        onSiteRemote = request.form.getlist("onSiteRemote")
         file = request.files["file"]
         if file:
             global filename
             filename = file.filename
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
             return redirect(
                 url_for("ai"),
             )
@@ -29,11 +42,14 @@ def index():
 
 @app.route("/ai")
 def ai():
+    print(f"{datePosted}\n{jobType}\n{experienceLevel}\n{onSiteRemote}")
     data, location, skills = get_summary_of_resume(filename)
     # location_id = get_linkedin_location(location)
-    jobs = search_for_jobs_without_location(skills)
-    global outer_jobs
-    outer_jobs = jobs
+    jobs = search_for_jobs_without_location(
+        skills, datePosted, jobType, experienceLevel, onSiteRemote
+    )
+    # global outer_jobs
+    # outer_jobs = jobs
     # test_prompt = matched_jobs(filename, jobs)
     # print(test_prompt)
     return render_template(

@@ -1,3 +1,7 @@
+{% import './components/datePosted.html' as datePosted%} {% import
+'./components/jobType.html' as jobType%} {% import
+'./components/experienceLevel.html' as experienceLevel%} {% import
+'./components/onSiteRemote.html' as onSiteRemote%}
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
@@ -12,35 +16,22 @@
     <title>Home</title>
   </head>
   <body class="p-3 d-flex row justify-content-center">
-    <!-- <div class="container row d-flex justify-content-center">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-          id="flexRadioDefault1"
-        />
-        <label class="form-check-label" for="flexRadioDefault1">
-          Default radio
-        </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-          id="flexRadioDefault2"
-          checked
-        />
-        <label class="form-check-label" for="flexRadioDefault2">
-          Default checked radio
-        </label>
-      </div>
-    </div> -->
-    <div class="container mt-5">
+    <h5>Job search settings:</h5>
+    <div class="container d-flex row justify-content-start mx-3">
       <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" value="Upload" />
+        <!-- datePosted -->
+        {{ datePosted.datePostedRadio() }}
+        <!-- jobType -->
+        {{ jobType.jobTypeRadio() }}
+        <!-- experienceLevel -->
+        {{ experienceLevel.experienceLevelRadio() }}
+        <!-- onSiteRemote -->
+        {{ onSiteRemote.onSiteRemoteRadio() }}
+        <div class="mt-5">
+          <h6>Resume File Upload</h6>
+          <input type="file" name="file" />
+          <input type="submit" value="Upload" />
+        </div>
       </form>
     </div>
   </body>
