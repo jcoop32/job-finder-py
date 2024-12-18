@@ -42,6 +42,17 @@
     >
     <hr />
     <h1>Job Results based on your resume</h1>
+    <div class="container d-flex justify-content-evenly">
+      <p><strong>{{ dp }}</strong></p>
+      <p><strong>·</strong></p>
+      <p><strong>{{ jt }}</strong></p>
+      <p><strong>·</strong></p>
+      <p><strong>{{ el }}</strong></p>
+      {% if osr %}
+      <p><strong>·</strong></p>
+      <p><strong>{{ osr }}</strong></p>
+      {% endif %}
+    </div>
     <h6>{{ count }} total job(s)</h6>
     <div class="container text-center">
       {% for j in jobs %}

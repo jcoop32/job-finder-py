@@ -62,29 +62,18 @@ def search_for_jobs(key_words, location_id):
 # get_job_details("4073579367")
 
 
-def search_for_jobs_without_location(
-    key_words, datePosted, jobType, experienceLevel, onSiteRemote
-):
+def search_for_jobs_without_location(key_words, settings: dict):
     url = url2
     location = "103112676"  # chicago
-    if datePosted and jobType and experienceLevel and onSiteRemote:
-        querystring = {
-            "keywords": key_words,
-            "locationId": location,
-            "datePosted": "pastWeek",
-            "jobType": "fullTime",
-            "onSiteRemote": [onSiteRemote],
-            "sort": "mostRelevant",
-        }
-    else:
-        querystring = {
-            "keywords": key_words,
-            "locationId": location,
-            "datePosted": "pastWeek",
-            "jobType": "fullTime",
-            "onSiteRemote": [onSiteRemote],
-            "sort": "mostRelevant",
-        }
+    querystring = {
+        "keywords": key_words,
+        "locationId": location,
+        "datePosted": "pastWeek",
+        "jobType": "fullTime",
+        "sort": "mostRelevant",
+    }
+    if settings:
+        querystring.update(settings)
 
     headers = {
         "x-rapidapi-key": job_api_key,
