@@ -14,10 +14,9 @@ class JobPosting(typing.TypedDict):
     id: str
     title: str
     url: str
-    referenceId: str
-    posterId: str
     company: Company
     location: str
     type: str
     postDate: str
     benefits: str
+    directApplyUrl: str

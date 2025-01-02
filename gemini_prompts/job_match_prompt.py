@@ -1,4 +1,5 @@
-prompt = """
+def job_prompt(jobs):
+    prompt = f"""
 I have a resume and a JSON object containing a list of job postings. I want you to analyze the resume and filter the job postings based on how well they match the candidate's qualifications.
 
 Step 1: Analyze the Resume
@@ -21,6 +22,33 @@ Step 2: Filter Job Postings
 
 Step 3: Return Filtered Job Postings
 
-    Return the same JSON object you received, but with the irrelevant job postings removed. The structure of the JSON object should remain unchanged.
+    Return the same JSON object you received, but with the irrelevant job postings removed. The structure of the JSON object should remain unchanged and strictly follow this format (should be a python dictionary returned):
 
+
+    {{
+    "jobs": [
+        {{
+        "id": "string", // Unique identifier for the job posting
+        "title": "string", // Title of the job
+        "url": "string", // URL of the job posting
+        "referenceId": "string",
+        "posterId": "string",
+        "company": {{
+            "id": "string", // Unique identifier for the company
+            "name": "string", // Name of the company
+            "logo": "string", // URL to the company logo
+            "url": "string" // URL to the company website
+        }},
+        "location": "string", // Location of the job
+        "type": "string", // Type of job (e.g., "Full-time", "Part-time")
+        "postDate": "string", // Date the job was posted
+        "benefits": "string" // Description of job benefits
+        }}
+    ]
+    }}
+
+
+
+    Here is the json of jobs: {jobs}
 """
+    return prompt

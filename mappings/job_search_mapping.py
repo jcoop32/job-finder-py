@@ -14,7 +14,11 @@ experience_level_mapping = {
     "executive": "Executive",
 }
 
-onsiteremote_type = {"onSite": "On-site", "remote": "Remote", "hybrid": "Hybrid"}
+onsiteremote_type = {
+    "onSite": "On-site",
+    "remote": "Remote",
+    "hybrid": "Hybrid",
+}
 
 
 job_type_mapping = {

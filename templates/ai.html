@@ -76,7 +76,14 @@
           <a href="{{ j.url }}" target="_blank"
             ><button type="button" class="btn btn-primary">Apply</button></a
           >
+          <a href="/job-submitter/{{ j.id }}" target="_blank"
+            ><button type="button" class="btn btn-success">
+              Submit
+            </button></a
+          >
+           {% if j.postDate %}
           <p>Posted {{ j.postDate }}</p>
+          {% endif %}
         </div>
       </div>
       {% endfor %}

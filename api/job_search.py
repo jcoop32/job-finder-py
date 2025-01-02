@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# from schemas.job_api_schema import JobPosting
+from schemas.job_api_schema import JobPosting
 
 from api.get_location import get_linkedin_location
 
@@ -13,7 +13,7 @@ api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 
 load_dotenv()
 
-job_api_key = os.getenv("job_api_7")
+job_api_key = os.getenv("job_api_5")
 job_api_key2 = os.getenv("job_api_2")
 
 url1 = "https://linkedin-data-api.p.rapidapi.com/search-jobs-v2"
@@ -29,6 +29,18 @@ key_words_list = [
 ]
 
 location = "103112676"  # chicago
+
+
+def job_application_url(job_id):
+    job = api.get_job(job_id)
+    applyMethod = job["applyMethod"]
+    if "com.linkedin.voyager.jobs.OffsiteApply" in applyMethod:
+        url = job["applyMethod"]["com.linkedin.voyager.jobs.OffsiteApply"][
+            "companyApplyUrl"
+        ]
+        return url
+    elif "com.linkedin.voyager.jobs.ComplexOnsiteApply" in applyMethod:
+        return False
 
 
 def search_for_jobs(key_words, location_id):
@@ -49,8 +61,7 @@ def search_for_jobs(key_words, location_id):
     try:
         response = requests.get(url, headers=headers, params=querystring)
         response_to_json = response.json()
-        data = response_to_json["data"]
-        # print(data)
+        data: list[JobPosting] = response_to_json["data"]
         return data
     except requests.exceptions.RequestException as e:
         print(f"Error occured: {e}")
@@ -81,10 +92,12 @@ def search_for_jobs_without_location(key_words, settings: dict):
     }
     try:
         response = requests.get(url, headers=headers, params=querystring)
-        # print(response)
         response_to_json = response.json()
-        data = response_to_json["data"]
-
+        data: list[JobPosting] = response_to_json["data"]
+        # for job in data:
+        #     url = job_application_url(job["id"])
+        #     if url:
+        #         job.update(directApplyUrl=url)
         return data
     except requests.exceptions.RequestException as e:
         print(f"Error occured: {e}")
@@ -93,12 +106,5 @@ def search_for_jobs_without_location(key_words, settings: dict):
 # search_for_jobs_without_location(key_words_list)
 
 
-def job_details(job_id):
-    job = api.get_job_skills(job_id)
-    job_skills = [skill["skill"]["name"] for skill in job["skillMatchStatuses"][:10]]
-
-    return job_skills
-    # print(job_skills)
-
-
-# job_details("4089332020")
+# job_application_url("4111212537")
+# job_application_url("4089332020")

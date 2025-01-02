@@ -15,30 +15,24 @@
     <h1>Gemini Fitered Jobs</h1>
     <div class="container text-center">
       <h6>{{ count }} total job(s)</h6>
-      {% for j in jobs %} {% if j.job_id %}
-      <div class="row" id="{{ j.job_id }}">
-        {% if j.company.logo_url %}
-        <div class="col-2 border rounded-start">
-          <img
-            src="{{ j.company.logo_url }}"
-            alt="company logo of {{
-          j.company.name }}"
-            width="128px"
-            height="128px"
-          />
-        </div>
-        {% endif %}
+      {% for j in jobs %} {% if j.id %}
+      <div class="row" id="{{ j.id }}">
+
         <div class="col border">
           <h5>{{ j["title"] }}</h5>
-          <h6>{{ j.company.name }}</h6>
-          <p>{{ j["location"] }}</p>
-          <p>{{ j["benefits"] }}</p>
         </div>
         <div class="col-2 border rounded-end">
           <a href="{{ j.url }}" target="_blank"
             ><button type="button" class="btn btn-primary">Apply</button></a
           >
+          <a href="/job-submitter/{{ j.id }}" target="_blank"
+            ><button type="button" class="btn btn-success">
+              Submit Application with AI
+            </button></a
+          >
+          {% if j.postDate %}
           <p>Posted {{ j.postDate }}</p>
+          {% endif %}
         </div>
       </div>
       {% endif %} {% endfor %}

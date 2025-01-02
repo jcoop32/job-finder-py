@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
-from api.gemini import get_summary_of_resume, matched_jobs
-from api.job_search import search_for_jobs_without_location
+from api.gemini.resume_analysis import get_summary_of_resume
+from api.gemini.matched_jobs import matched_jobs
+from api.job_search import search_for_jobs_without_location, job_application_url
 import mappings.job_search_mapping as job_search_mappings
 from api.get_location import get_linkedin_location
+from job_application_submitter.application_submitter import ApplicationPage, driver
+
+# from aws.s3.s3_utilities import upload_file_to_s3, get_presigned_url
 import os
 
 
@@ -34,6 +38,12 @@ def index():
             global filename
             filename = file.filename
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            # try:
+            #     upload_file_to_s3(file)
+            #     time.sleep(2)
+            #     print(get_presigned_url(filename))
+            # except:
+            #     print("Error uploading file")
             return redirect(
                 url_for("ai"),
             )
@@ -46,10 +56,10 @@ def ai():
     data, location, skills = get_summary_of_resume(filename)
     # location_id = get_linkedin_location(location)
     jobs = search_for_jobs_without_location(skills, job_search_settings)
-    dp = job_search_mappings.date_posted_mapping.get(datePosted)
-    jt = job_search_mappings.job_type_mapping.get(jobType)
-    el = job_search_mappings.experience_level_mapping.get(experienceLevel)
-    osr = job_search_mappings.onsiteremote_type.get(onSiteRemote)
+    date_posted = job_search_mappings.date_posted_mapping.get(datePosted)
+    job_title = job_search_mappings.job_type_mapping.get(jobType)
+    experience_level = job_search_mappings.experience_level_mapping.get(experienceLevel)
+    onsite_remote = job_search_mappings.onsiteremote_type.get(onSiteRemote)
     global outer_jobs
     outer_jobs = jobs
     # test_prompt = matched_jobs(filename, jobs)
@@ -60,17 +70,36 @@ def ai():
         jobs=jobs,
         filename=filename,
         count=len(jobs),
-        dp=dp,
-        jt=jt,
-        el=el,
-        osr=osr,
+        dp=date_posted,
+        jt=job_title,
+        el=experience_level,
+        osr=onsite_remote,
     )
 
 
 @app.route("/gemini")
 def gemini():
     filtered_jobs = matched_jobs(filename, outer_jobs)
-    return render_template("gemini.html", jobs=filtered_jobs, count=len(filtered_jobs))
+    return render_template("gemini.html", jobs=filtered_jobs)
+
+
+@app.route("/job-submitter/<int:job_id>")
+def job_app_submitter(job_id):
+    company_application_url = job_application_url(job_id)
+    if company_application_url:
+        application = ApplicationPage(url=company_application_url, driver=driver)
+        can_submit = application.is_one_page_application()
+        # if can_submit:
+        #     inputs = application.find_info_inputs()
+        # else:
+        #     inputs = ""
+    else:
+        can_submit = False
+    # return f"Can use automatic job submitter?: {application.is_one_page_application()} \nAlso {application.find_info_inputs()}"
+    return render_template(
+        "job-submitter.html",
+        can_submit=can_submit,
+    )
 
 
 if __name__ == "__main__":
