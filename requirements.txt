@@ -1,8 +1,8 @@
+boto3==1.29.6
 Flask==3.1.0
-flask_sqlalchemy==3.1.1
 linkedin_api==2.3.1
-protobuf==5.29.1
+protobuf==5.29.2
 python-dotenv==1.0.1
 Requests==2.32.3
-SQLAlchemy==2.0.32
+selenium==4.27.1
 typing_extensions==4.12.2
