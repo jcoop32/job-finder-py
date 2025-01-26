@@ -4,6 +4,7 @@ from api.gemini.matched_jobs import matched_jobs
 from api.job_search import search_for_jobs_without_location, job_application_url
 import mappings.job_search_mapping as job_search_mappings
 from api.get_location import get_linkedin_location
+from api.gemini.determine_application_type import application_type
 from job_application_submitter.application_submitter import ApplicationPage, driver
 
 # from aws.s3.s3_utilities import upload_file_to_s3, get_presigned_url
@@ -87,19 +88,16 @@ def gemini():
 def job_app_submitter(job_id):
     company_application_url = job_application_url(job_id)
     if company_application_url:
-        application = ApplicationPage(url=company_application_url, driver=driver)
-        can_submit = application.is_one_page_application()
-        # if can_submit:
-        #     inputs = application.find_info_inputs()
-        # else:
-        #     inputs = ""
+        can_submit = application_type(company_application_url)
+        # print(f"url found: {can_submit}")
     else:
         can_submit = False
+    return str(can_submit)
     # return f"Can use automatic job submitter?: {application.is_one_page_application()} \nAlso {application.find_info_inputs()}"
-    return render_template(
-        "job-submitter.html",
-        can_submit=can_submit,
-    )
+    # return render_template(
+    #     "job-submitter.html",
+    #     can_submit=can_submit,
+    # )
 
 
 if __name__ == "__main__":

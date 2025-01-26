@@ -13,7 +13,7 @@ api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 
 load_dotenv()
 
-job_api_key = os.getenv("job_api_5")
+job_api_key = os.getenv("job_api_6")
 job_api_key2 = os.getenv("job_api_2")
 
 url1 = "https://linkedin-data-api.p.rapidapi.com/search-jobs-v2"
@@ -74,7 +74,7 @@ def search_for_jobs(key_words, location_id):
 
 
 def search_for_jobs_without_location(key_words, settings: dict):
-    url = url2
+    url = url1
     location = "103112676"  # chicago
     querystring = {
         "keywords": key_words,
@@ -88,7 +88,7 @@ def search_for_jobs_without_location(key_words, settings: dict):
 
     headers = {
         "x-rapidapi-key": job_api_key,
-        "x-rapidapi-host": host2,
+        "x-rapidapi-host": host1,
     }
     try:
         response = requests.get(url, headers=headers, params=querystring)
