@@ -9,9 +9,10 @@ from api.get_location import get_linkedin_location
 # from get_location import get_linkedin_location
 from linkedin_api import Linkedin
 
+load_dotenv()
+
 api = Linkedin("coopj3265@gmail.com", os.getenv("linkedin_pass"))
 
-load_dotenv()
 
 job_api_key = os.getenv("job_api_6")
 job_api_key2 = os.getenv("job_api_2")

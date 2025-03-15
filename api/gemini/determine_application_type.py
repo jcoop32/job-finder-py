@@ -4,7 +4,7 @@ import os
 import json
 import typing_extensions as typing
 
-from gemini_prompts.determine_application_type import is_application_submit
+from gemini_prompts.determine_application_type_prompt import is_application_submit
 
 # from aws.s3.s3_utilities import get_presigned_url
 

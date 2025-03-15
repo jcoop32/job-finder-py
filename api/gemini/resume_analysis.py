@@ -34,5 +34,6 @@ def get_summary_of_resume(resume_filename):
     data: ResumeAnalysis = json_form
     location = data["location"]
     skills = data["skills"] + data["suggested_job_titles"] + [data["current_job_title"]]
+    data.update({"resume_filepath": f"resume_uploads/{resume_filename}"})
 
     return data, location, skills

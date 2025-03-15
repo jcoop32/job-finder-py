@@ -10,12 +10,22 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/static/style.css" />
+    {% if can_submit %}
     <title>Job Application Submit Status</title>
+    {% else %}
+    <title>Cannot Submit Job Application!</title>
+    {% endif %}
 </head>
 <body class="p-3">
     {% if can_submit %}
         <h3>This application can be submitted</h3>
-        <h6>Inputs Found: {{ inputs }}</h6>
+        <h3>Form:</h3>
+        <p>{{ form }}</p>
+        {% if sent %}
+        <p>Application sent!</p>
+        {% else %}
+        <p>Something went wrong when trying to submit application :(</p>
+        {% endif %}
     {% else %}
         <h1>This application can not be submitted</h1>
     {% endif %}

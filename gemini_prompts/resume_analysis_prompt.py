@@ -3,9 +3,12 @@ I have a resume that I want you to analyze. Please follow these steps carefully 
 
 Step 1: Identify the Candidate
 
+    First Name: Find the candidate's first name.
+    Last Name: Find the candidate's last name.
     Name: Find the candidate's full name.
     Location: Determine their city or state (or country, if provided) (ex. Chicago, California, Miami, etc.). If both state and city are present, pick the city.
     Email Address: Extract the candidate's email address.
+    Phone Number: If provided, extract the candidate's phone number (xxx-xxx-xxxx).
     LinkedIn Profile URL: If provided, extract the URL of the candidate's LinkedIn profile.
 
 Step 2:  Analyze their Current or Most Recent Role
